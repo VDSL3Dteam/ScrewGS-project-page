@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,16 +64,16 @@
       institutionLogoAlt: "Sogang University logo",
 
       authors: [
-        { name: "Suwoong Yeom",  link: "FIRST AUTHOR PERSONAL LINK",  equal: true },
-        { name: "Joonsik Nam",   link: "SECOND AUTHOR PERSONAL LINK", equal: true },
-        { name: "Seunggyu Choi", link: "THIRD AUTHOR PERSONAL LINK",  equal: true }
+        { name: "Suwoong Yeom", link: "FIRST AUTHOR PERSONAL LINK", equal: true },
+        { name: "Joonsik Nam", link: "SECOND AUTHOR PERSONAL LINK", equal: true },
+        { name: "Seunggyu Choi", link: "THIRD AUTHOR PERSONAL LINK", equal: true }
       ],
 
       links: {
-        pdf:  "https://YOUR_PDF_LINK.pdf",
-        arxiv:"https://arxiv.org/abs/ARXIV_ID",
-        code:"https://github.com/YOUR_REPO_HERE",
-        supp:"static/pdfs/supplementary_material.pdf"
+        pdf: "https://YOUR_PDF_LINK.pdf",
+        arxiv: "https://arxiv.org/abs/ARXIV_ID",
+        code: "https://github.com/YOUR_REPO_HERE",
+        supp: "static/pdfs/supplementary_material.pdf"
       },
 
       teaserVideoSrc: "static/videos/banner_video.mp4",
@@ -81,15 +82,15 @@
 
       results: [
         { label: "Scene 1 · Baseline vs Ours", image: "static/images/carousel1.jpg" },
-        { label: "Scene 2 · View Synthesis",   image: "static/images/carousel2.jpg" },
-        { label: "Scene 3 · Relighting",       image: "static/images/carousel3.jpg" },
-        { label: "Scene 4 · Novel View",       image: "static/images/carousel4.jpg" }
+        { label: "Scene 2 · View Synthesis", image: "static/images/carousel2.jpg" },
+        { label: "Scene 3 · Relighting", image: "static/images/carousel3.jpg" },
+        { label: "Scene 4 · Novel View", image: "static/images/carousel4.jpg" }
       ],
 
       interactive3D: [
         { label: "Scene 1 ", model: "static/model/glbscene_50_All_maskbFalse_maskwFalse_camTrue_skyFalse_predDepthmap_and_Camera_Branch.glb" },
         { label: "Scene 2 ", model: "static/model/R_Tower.glb" },
-        
+
       ],
 
       videoCompareSets: [
@@ -98,14 +99,14 @@
           leftLabel: "Baseline",
           rightLabel: "Ours",
           leftSrc: "static/videos/carousel2.mp4",
-          rightSrc:"static/videos/carousel1.mp4"
+          rightSrc: "static/videos/carousel1.mp4"
         },
         {
           label: "Seq 2 · Baseline vs Ours",
           leftLabel: "Baseline",
           rightLabel: "Ours",
           leftSrc: "static/videos/carousel3.mp4",
-          rightSrc:"static/videos/carousel1.mp4"
+          rightSrc: "static/videos/carousel1.mp4"
         }
       ],
 
@@ -113,7 +114,12 @@
         { label: "More Result · View 1", src: "static/videos/carousel1.mp4" },
         { label: "More Result · View 2", src: "static/videos/carousel2.mp4" },
         { label: "More Result · View 3", src: "static/videos/carousel3.mp4" }
-      ]
+      ],
+
+      // 4D Gaussian Viewer (Viser)
+      viser4D: {
+        playbackPath: "https://wwwjjn.github.io/test_page.github.io/static/recordings/recording_hosejump_high.viser"
+      }
     };
   </script>
 
@@ -125,10 +131,18 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <!-- Local FontAwesome CSS requires webfonts directory which is missing. Using CDN instead. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
 
   <!-- 3D Viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer@latest/dist/model-viewer.min.js"></script>
@@ -180,6 +194,21 @@
 
   <!-- Custom styles -->
   <style>
+    /* Fix icon visibility issues inside buttons */
+    .button .icon i.fas,
+    .button .icon i.fa-solid {
+      font-weight: 900 !important;
+    }
+
+    .button .icon i.fab,
+    .button .icon i.fa-brands {
+      font-weight: 400 !important;
+    }
+
+    .button .icon i.ai {
+      font-weight: normal !important;
+    }
+
     /* 2-way video comparison */
     .comparison-wrapper {
       margin-top: 1.5rem;
@@ -204,7 +233,9 @@
       object-fit: cover;
     }
 
-    #video-left { z-index: 1; }
+    #video-left {
+      z-index: 1;
+    }
 
     #video-right {
       z-index: 2;
@@ -243,7 +274,7 @@
       height: 38px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.96);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -270,8 +301,13 @@
       z-index: 4;
     }
 
-    .comparison-label-left { left: 16px; }
-    .comparison-label-right { right: 16px; }
+    .comparison-label-left {
+      left: 16px;
+    }
+
+    .comparison-label-right {
+      right: 16px;
+    }
 
     /* Results / thumbnails / tabs 공통 스타일 */
     .results-main-wrapper {
@@ -282,7 +318,7 @@
     .results-main-image {
       width: 100%;
       border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     }
 
     .results-thumbs {
@@ -328,7 +364,7 @@
       height: 0;
       overflow: hidden;
       border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
       background: #000;
     }
 
@@ -392,7 +428,8 @@
       border-style: solid;
       border-width: 8px 0 8px 13px;
       border-color: transparent transparent transparent #111827;
-      transform: translateX(1px);  /* 시각적 중앙 보정 */
+      transform: translateX(1px);
+      /* 시각적 중앙 보정 */
     }
 
     .media-play-btn[data-state="play"]::after {
@@ -435,13 +472,11 @@
       outline: none;
       cursor: pointer;
       margin-top: 1px;
-      background-image: linear-gradient(
-        to right,
-        #06b6d4 0%,
-        #06b6d4 var(--val, 0%),
-        #e5e7eb var(--val, 0%),
-        #e5e7eb 100%
-      );
+      background-image: linear-gradient(to right,
+          #06b6d4 0%,
+          #06b6d4 var(--val, 0%),
+          #e5e7eb var(--val, 0%),
+          #e5e7eb 100%);
     }
 
     .media-progress::-webkit-slider-runnable-track {
@@ -484,6 +519,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Scroll to Top Button -->
@@ -493,325 +529,279 @@
 
   <main id="main-content">
 
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">VDSL 3D team Template</h1>
-
-            <div class="is-size-5 publication-authors" id="authors-container"></div>
-
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <span id="institution-logo-wrapper">
-                  <img id="institution-logo" class="institution-logo" src="" alt="" style="display:none;">
-                </span>
-                <span id="paper-subtitle-text">
-                  Sogang University<br>Conference name and year
-                </span>
-              </span>
-              <span class="eql-cntrb" id="equal-contrib-note">
-                <small><br><sup>*</sup>Indicates Equal Contribution</small>
-              </span>
-            </div>
-
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
             <div class="column has-text-centered">
-              <div class="publication-links">
-                <span class="link-block">
-                  <a id="link-pdf" href="#" target="_blank"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                    <span>Paper (PDF)</span>
-                  </a>
-                </span>
-                <span class="link-block">
-                  <a id="link-arxiv" href="#" target="_blank"
-                     class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon"><i class="ai ai-arxiv"></i></span>
-                    <span>arXiv</span>
-                  </a>
-                </span>
-                <span class="link-block">
-                  <a id="link-code" href="#" target="_blank"
-                     class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon"><i class="fab fa-github"></i></span>
-                    <span>Code</span>
-                  </a>
-                </span>
-                <!-- Supplementary 버튼 제거됨 -->
-              </div>
-            </div>
+              <h1 class="title is-1 publication-title">VDSL 3D team Template</h1>
 
+              <div class="is-size-5 publication-authors" id="authors-container"></div>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">
+                  <span id="institution-logo-wrapper">
+                    <img id="institution-logo" class="institution-logo" src="" alt="" style="display:none;">
+                  </span>
+                  <span id="paper-subtitle-text">
+                    Sogang University<br>Conference name and year
+                  </span>
+                </span>
+                <span class="eql-cntrb" id="equal-contrib-note">
+                  <small><br><sup>*</sup>Indicates Equal Contribution</small>
+                </span>
+              </div>
+
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <span class="link-block">
+                    <a id="link-pdf" href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                      <span>Paper (PDF)</span>
+                    </a>
+                  </span>
+                  <span class="link-block">
+                    <a id="link-arxiv" href="#" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="ai ai-arxiv"></i></span>
+                      <span>arXiv</span>
+                    </a>
+                  </span>
+                  <span class="link-block">
+                    <a id="link-code" href="#" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fab fa-github"></i></span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+                  <!-- Supplementary 버튼 제거됨 -->
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- TEASER -->
-  <section class="hero teaser">
-    <div class="container is-max-desktop">
-      <div class="hero-body">
-        <video poster="" id="teaser-video" muted loop playsinline preload="metadata" autoplay>
-          <source id="teaser-video-source" src="static/videos/banner_video.mp4" type="video/mp4">
-        </video>
-        <h2 class="subtitle has-text-centered">
-          One-line teaser describing the main result of the paper.
-        </h2>
+    <!-- TEASER -->
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <video poster="" id="teaser-video" muted loop playsinline preload="metadata" autoplay>
+            <source id="teaser-video-source" src="static/videos/banner_video.mp4" type="video/mp4">
+          </video>
+          <h2 class="subtitle has-text-centered">
+            One-line teaser describing the main result of the paper.
+          </h2>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ABSTRACT -->
-  <section class="section hero is-light" id="abstract">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper
-              tellus sed ante aliquam tempus. (Put your paper abstract here.)
+    <!-- ABSTRACT -->
+    <section class="section hero is-light" id="abstract">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper
+                tellus sed ante aliquam tempus. (Put your paper abstract here.)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODEL OVERVIEW -->
+    <section class="section" id="model-overview">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column">
+            <h2 class="title is-3 has-text-centered">Model Overview</h2>
+            <figure class="image">
+              <img id="model-overview-image" src="static/images/carousel1.jpg" alt="Model overview figure"
+                loading="lazy">
+              <figcaption id="model-overview-caption" class="has-text-centered has-text-grey is-size-6 mt-3">
+                Brief caption describing the overall architecture or pipeline.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D & 4D VIEWERS -->
+    <section class="section hero is-light" id="viewer-3d">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Interactive 3D &amp; 4D Viewer</h2>
+
+        <div class="columns is-multiline">
+          <!-- 3D (GLB) 뷰어 -->
+          <div class="column is-12-tablet is-6-desktop">
+            <h3 class="title is-5 has-text-centered mb-3">3D Model Viewer</h3>
+
+            <model-viewer id="mv-4d" src="" alt="3D model" camera-controls autoplay
+              style="width: 100%; height: 420px; background-color: #ffffff;">
+            </model-viewer>
+
+            <p class="has-text-centered is-size-7 has-text-grey mt-2">
+              Animated <code>.glb</code>/<code>.gltf</code> files from
+              <code>static/model/...</code>, configured via
+              <code>PAGE_CONFIG.interactive3D</code>.
+            </p>
+
+            <div class="results-thumbs" id="viewer-3d-thumbs"></div>
+          </div>
+
+          <!-- 4D (Viser .viser) iframe -->
+          <div class="column is-12-tablet is-6-desktop">
+            <h3 class="title is-5 has-text-centered mb-3">4D Gaussian Viewer </h3>
+
+            <div class="box is-paddingless" style="border-radius:12px; overflow:hidden;">
+              <iframe id="viser-iframe"
+                src="static/viser-client/index.html?playbackPath=https://wwwjjn.github.io/test_page.github.io/static/recordings/recording_hosejump_high.viser"
+                width="100%" height="420" frameborder="0" style="border:none; display:block; background:#000;"
+                loading="lazy" allowfullscreen>
+              </iframe>
+            </div>
+
+            <p class="has-text-grey is-size-7 mt-1">
+              Playback of a pre-recorded <code>.viser</code> scene generated from
+              the 4D Gaussian splatting sequence.
             </p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- MODEL OVERVIEW -->
-  <section class="section" id="model-overview">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column">
-          <h2 class="title is-3 has-text-centered">Model Overview</h2>
-          <figure class="image">
-            <img id="model-overview-image"
-                 src="static/images/carousel1.jpg"
-                 alt="Model overview figure"
-                 loading="lazy">
-            <figcaption id="model-overview-caption"
-                        class="has-text-centered has-text-grey is-size-6 mt-3">
-              Brief caption describing the overall architecture or pipeline.
-            </figcaption>
-          </figure>
+    <!-- RESULTS (images with tabs) -->
+    <section class="section" id="results">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Results</h2>
+
+        <div class="results-main-wrapper">
+          <img id="result-main" class="results-main-image" src="static/images/carousel1.jpg" alt="Main result image">
+
+          <div class="results-thumbs" id="results-thumbs-container"></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 3D & 4D VIEWERS -->
-  <section class="section hero is-light" id="viewer-3d">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Interactive 3D &amp; 4D Viewer</h2>
+    <!-- QUALITATIVE VIDEO COMPARISON -->
+    <section class="section" id="video-compare-slider">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Qualitative Video Comparison</h2>
 
-      <div class="columns is-multiline">
-        <!-- 3D (GLB) 뷰어 -->
-        <div class="column is-12-tablet is-6-desktop">
-          <h3 class="title is-5 has-text-centered mb-3">3D Model Viewer</h3>
+        <div class="comparison-wrapper">
+          <div class="comparison-video-container" id="video-compare-container">
+            <!-- Left: Baseline -->
+            <video id="video-left" class="compare-video" muted loop playsinline preload="metadata" autoplay>
+              <source src="static/videos/carousel2.mp4" type="video/mp4">
+            </video>
 
-          <model-viewer id="mv-4d"
-                        src=""
-                        alt="3D model"
-                        camera-controls
-                        autoplay
-                        style="width: 100%; height: 420px; background-color: #ffffff;">
-          </model-viewer>
+            <!-- Right: Ours -->
+            <video id="video-right" class="compare-video" muted loop playsinline preload="metadata" autoplay>
+              <source src="static/videos/carousel1.mp4" type="video/mp4">
+            </video>
 
-          <p class="has-text-centered is-size-7 has-text-grey mt-2">
-            Animated <code>.glb</code>/<code>.gltf</code> files from
-            <code>static/model/...</code>, configured via
-            <code>PAGE_CONFIG.interactive3D</code>.
-          </p>
+            <span class="comparison-label comparison-label-left" id="video-left-label">
+              Baseline
+            </span>
+            <span class="comparison-label comparison-label-right" id="video-right-label">
+              Ours
+            </span>
 
-          <div class="results-thumbs" id="viewer-3d-thumbs"></div>
-        </div>
-
-        <!-- 4D (Viser .viser) iframe -->
-        <div class="column is-12-tablet is-6-desktop">
-          <h3 class="title is-5 has-text-centered mb-3">4D Gaussian Viewer </h3>
-
-          <div class="box is-paddingless" style="border-radius:12px; overflow:hidden;">
-            <iframe
-              src="static/viser-client/?playbackPath=https://wwwjjn.github.io/test_page.github.io/static/recordings/recording_hosejump_high.viser"
-              width="100%"
-              height="420"
-              frameborder="0"
-              style="border:none; display:block; background:#000;"
-              loading="lazy"
-              allowfullscreen>
-            </iframe>
-          </div>
-
-          <p class="has-text-grey is-size-7 mt-1">
-            Playback of a pre-recorded <code>.viser</code> scene generated from
-            the 4D Gaussian splatting sequence.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- RESULTS (images with tabs) -->
-  <section class="section" id="results">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Results</h2>
-
-      <div class="results-main-wrapper">
-        <img id="result-main" class="results-main-image"
-             src="static/images/carousel1.jpg"
-             alt="Main result image">
-
-        <div class="results-thumbs" id="results-thumbs-container"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- QUALITATIVE VIDEO COMPARISON -->
-  <section class="section" id="video-compare-slider">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Qualitative Video Comparison</h2>
-
-      <div class="comparison-wrapper">
-        <div class="comparison-video-container" id="video-compare-container">
-          <!-- Left: Baseline -->
-          <video id="video-left" class="compare-video"
-                 muted loop playsinline preload="metadata" autoplay>
-            <source src="static/videos/carousel2.mp4" type="video/mp4">
-          </video>
-
-          <!-- Right: Ours -->
-          <video id="video-right" class="compare-video"
-                 muted loop playsinline preload="metadata" autoplay>
-            <source src="static/videos/carousel1.mp4" type="video/mp4">
-          </video>
-
-          <span class="comparison-label comparison-label-left" id="video-left-label">
-            Baseline
-          </span>
-          <span class="comparison-label comparison-label-right" id="video-right-label">
-            Ours
-          </span>
-
-          <div class="compare-handle" id="compare-handle">
-            <div class="compare-handle-circle">
-              <span class="compare-handle-chev">&lt;</span>
-              <span class="compare-handle-chev">&gt;</span>
+            <div class="compare-handle" id="compare-handle">
+              <div class="compare-handle-circle">
+                <span class="compare-handle-chev">&lt;</span>
+                <span class="compare-handle-chev">&gt;</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- 플레이어 컨트롤 (Qualitative) -->
-        <div class="media-control-bar">
-          <button
-            id="video-compare-play"
-            type="button"
-            class="media-play-btn"
-            data-state="play"
-            aria-label="Play / Pause"
-          ></button>
-          <span id="video-compare-time" class="media-time-label">
-            0:00 / 0:00
-          </span>
-          <input
-            id="video-compare-progress"
-            class="media-progress"
-            type="range"
-            min="0"
-            max="100"
-            step="0.1"
-            value="0"
-          />
-        </div>
+          <!-- 플레이어 컨트롤 (Qualitative) -->
+          <div class="media-control-bar">
+            <button id="video-compare-play" type="button" class="media-play-btn" data-state="play"
+              aria-label="Play / Pause"></button>
+            <span id="video-compare-time" class="media-time-label">
+              0:00 / 0:00
+            </span>
+            <input id="video-compare-progress" class="media-progress" type="range" min="0" max="100" step="0.1"
+              value="0" />
+          </div>
 
-        <div class="results-thumbs mt-3" id="video-compare-thumbs"></div>
+          <div class="results-thumbs mt-3" id="video-compare-thumbs"></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- MORE VIDEOS -->
-  <section class="section" id="more-videos">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">More Results</h2>
+    <!-- MORE VIDEOS -->
+    <section class="section" id="more-videos">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">More Results</h2>
 
-      <div class="results-main-wrapper">
-        <video id="more-results-main"
-               class="results-main-image"
-               muted loop playsinline preload="metadata" autoplay>
-          <source id="more-results-main-source"
-                  src=""
-                  type="video/mp4">
-        </video>
+        <div class="results-main-wrapper">
+          <video id="more-results-main" class="results-main-image" muted loop playsinline preload="metadata" autoplay>
+            <source id="more-results-main-source" src="" type="video/mp4">
+          </video>
 
-        <!-- 플레이어 컨트롤 (More Results) -->
-        <div class="media-control-bar">
-          <button
-            id="more-results-play"
-            type="button"
-            class="media-play-btn"
-            data-state="play"
-            aria-label="Play / Pause"
-          ></button>
-          <span id="more-results-time" class="media-time-label">
-            0:00 / 0:00
-          </span>
-          <input
-            id="more-results-progress"
-            class="media-progress"
-            type="range"
-            min="0"
-            max="100"
-            step="0.1"
-            value="0"
-          />
+          <!-- 플레이어 컨트롤 (More Results) -->
+          <div class="media-control-bar">
+            <button id="more-results-play" type="button" class="media-play-btn" data-state="play"
+              aria-label="Play / Pause"></button>
+            <span id="more-results-time" class="media-time-label">
+              0:00 / 0:00
+            </span>
+            <input id="more-results-progress" class="media-progress" type="range" min="0" max="100" step="0.1"
+              value="0" />
+          </div>
+
+          <div class="results-thumbs" id="more-results-thumbs-container"></div>
         </div>
-
-        <div class="results-thumbs" id="more-results-thumbs-container"></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- YOUTUBE -->
-  <section class="hero is-small is-light" id="video">
-    <div class="hero-body">
-      <div class="container">
-        <h2 class="title is-3 has-text-centered">Video Presentation</h2>
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-four-fifths">
-            <div class="publication-video">
-              <iframe src="https://www.youtube.com/embed/JkaxUblCGz0"
-                      frameborder="0"
-                      allow="autoplay; encrypted-media"
-                      allowfullscreen>
-              </iframe>
+    <!-- YOUTUBE -->
+    <section class="hero is-small is-light" id="video">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-3 has-text-centered">Video Presentation</h2>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+              <div class="publication-video">
+                <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0"
+                  allow="autoplay; encrypted-media" allowfullscreen>
+                </iframe>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- BIBTEX -->
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <div class="bibtex-header">
-        <h2 class="title">BibTeX</h2>
-        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
-          <i class="fas fa-copy"></i>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre id="bibtex-code"><code>@article{YourPaperKey2024,
+    <!-- BIBTEX -->
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header">
+          <h2 class="title">BibTeX</h2>
+          <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+            <i class="fas fa-copy"></i>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+        <pre id="bibtex-code"><code>@article{YourPaperKey2024,
   title={Your Paper Title Here},
   author={First Author and Second Author and Third Author},
   journal={Conference/Journal Name},
   year={2024},
   url={https://your-domain.com/your-project-page}
 }</code></pre>
-    </div>
-  </section>
+      </div>
+    </section>
 
   </main>
 
@@ -828,7 +818,8 @@
               </a>
               which was adopted from the
               <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the
+              footer.
               <br>
               This website is licensed under a
               <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
@@ -842,124 +833,131 @@
   </footer>
 
   <!-- INLINE SCRIPTS -->
-<script>
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function copyBibTeX() {
-    const el = document.getElementById('bibtex-code');
-    if (!el) return;
-    const text = el.innerText || el.textContent;
-    navigator.clipboard && navigator.clipboard.writeText(text)
-      .catch(() => {});
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const cfg = window.PAGE_CONFIG || {};
-
-    const formatTime = (t) => {
-      if (!isFinite(t) || t < 0) return '0:00';
-      const m = Math.floor(t / 60);
-      const s = Math.floor(t % 60).toString().padStart(2, '0');
-      return `${m}:${s}`;
-    };
-
-    /* ===== 헤더 타이틀 / 저자 / 링크 ===== */
-    if (cfg.paperTitle) {
-      document.querySelectorAll('.publication-title')
-        .forEach(n => n.textContent = cfg.paperTitle);
-      document.title = cfg.paperTitle;
+  <script>
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    const subtitleTextNode = document.getElementById('paper-subtitle-text');
-    if (subtitleTextNode && cfg.paperSubtitleHTML) {
-      subtitleTextNode.innerHTML = cfg.paperSubtitleHTML;
+    function copyBibTeX() {
+      const el = document.getElementById('bibtex-code');
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+      navigator.clipboard && navigator.clipboard.writeText(text)
+        .catch(() => { });
     }
 
-    const instLogo = document.getElementById('institution-logo');
-    if (instLogo && cfg.institutionLogo) {
-      instLogo.src = cfg.institutionLogo;
-      instLogo.alt = cfg.institutionLogoAlt || 'Institution logo';
-      instLogo.style.display = 'inline-block';
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const cfg = window.PAGE_CONFIG || {};
 
-    if (Array.isArray(cfg.authors)) {
-      const authorsContainer = document.getElementById('authors-container');
-      if (authorsContainer) {
-        authorsContainer.innerHTML = cfg.authors.map((a, idx) => {
-          const sup = a.equal ? '<sup>*</sup>' : '';
-          const comma = (idx < cfg.authors.length - 1) ? ',' : '';
-          const link = a.link
-            ? `<a href="${a.link}" target="_blank">${a.name}</a>`
-            : a.name;
-          return `<span class="author-block">${link}${sup}</span>${comma}`;
-        }).join(' ');
-      }
-      const eqNote = document.getElementById('equal-contrib-note');
-      if (eqNote) {
-        const hasEqual = cfg.authors.some(a => a.equal);
-        eqNote.style.display = hasEqual ? '' : 'none';
-      }
-    }
-
-    if (cfg.links) {
-      const setHref = (id, url) => {
-        const el = document.getElementById(id);
-        if (el && url) el.href = url;
+      const formatTime = (t) => {
+        if (!isFinite(t) || t < 0) return '0:00';
+        const m = Math.floor(t / 60);
+        const s = Math.floor(t % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
       };
-      setHref('link-pdf',  cfg.links.pdf);
-      setHref('link-arxiv',cfg.links.arxiv);
-      setHref('link-code', cfg.links.code);
-      // Supplementary 버튼 제거 → setHref('link-supp', ...) 삭제
-    }
 
-    /* ===== Teaser & model overview ===== */
-    if (cfg.teaserVideoSrc) {
-      const tv = document.getElementById('teaser-video');
-      const src = document.getElementById('teaser-video-source');
-      if (tv && src) {
-        src.src = cfg.teaserVideoSrc;
-        tv.load();
-        tv.play().catch(() => {});
+      /* ===== 헤더 타이틀 / 저자 / 링크 ===== */
+      if (cfg.paperTitle) {
+        document.querySelectorAll('.publication-title')
+          .forEach(n => n.textContent = cfg.paperTitle);
+        document.title = cfg.paperTitle;
       }
-    }
 
-    if (cfg.modelOverviewImage) {
-      const img = document.getElementById('model-overview-image');
-      if (img) img.src = cfg.modelOverviewImage;
-    }
-    if (cfg.modelOverviewCaption) {
-      const cap = document.getElementById('model-overview-caption');
-      if (cap) cap.textContent = cfg.modelOverviewCaption;
-    }
+      const subtitleTextNode = document.getElementById('paper-subtitle-text');
+      if (subtitleTextNode && cfg.paperSubtitleHTML) {
+        subtitleTextNode.innerHTML = cfg.paperSubtitleHTML;
+      }
 
-    /* ===== 일반 video: 클릭하면 play/pause (비교용 두 영상 제외) ===== */
-    const vLeft = document.getElementById('video-left');
-    const vRight = document.getElementById('video-right');
+      const instLogo = document.getElementById('institution-logo');
+      if (instLogo && cfg.institutionLogo) {
+        instLogo.src = cfg.institutionLogo;
+        instLogo.alt = cfg.institutionLogoAlt || 'Institution logo';
+        instLogo.style.display = 'inline-block';
+      }
 
-    const allVideos = Array.from(document.querySelectorAll('video'));
-    allVideos.forEach(v => {
-      if (v === vLeft || v === vRight) return;
-      v.addEventListener('click', () => {
-        if (v.paused) v.play(); else v.pause();
+      if (Array.isArray(cfg.authors)) {
+        const authorsContainer = document.getElementById('authors-container');
+        if (authorsContainer) {
+          authorsContainer.innerHTML = cfg.authors.map((a, idx) => {
+            const sup = a.equal ? '<sup>*</sup>' : '';
+            const comma = (idx < cfg.authors.length - 1) ? ',' : '';
+            const link = a.link
+              ? `<a href="${a.link}" target="_blank">${a.name}</a>`
+              : a.name;
+            return `<span class="author-block">${link}${sup}</span>${comma}`;
+          }).join(' ');
+        }
+        const eqNote = document.getElementById('equal-contrib-note');
+        if (eqNote) {
+          const hasEqual = cfg.authors.some(a => a.equal);
+          eqNote.style.display = hasEqual ? '' : 'none';
+        }
+      }
+
+      if (cfg.links) {
+        const setHref = (id, url) => {
+          const el = document.getElementById(id);
+          if (el && url) el.href = url;
+        };
+        setHref('link-pdf', cfg.links.pdf);
+        setHref('link-arxiv', cfg.links.arxiv);
+        setHref('link-code', cfg.links.code);
+        // Supplementary 버튼 제거 → setHref('link-supp', ...) 삭제
+      }
+
+      /* ===== Teaser & model overview ===== */
+      if (cfg.teaserVideoSrc) {
+        const tv = document.getElementById('teaser-video');
+        const src = document.getElementById('teaser-video-source');
+        if (tv && src) {
+          src.src = cfg.teaserVideoSrc;
+          tv.load();
+          tv.play().catch(() => { });
+        }
+      }
+
+      if (cfg.modelOverviewImage) {
+        const img = document.getElementById('model-overview-image');
+        if (img) img.src = cfg.modelOverviewImage;
+      }
+      if (cfg.modelOverviewCaption) {
+        const cap = document.getElementById('model-overview-caption');
+        if (cap) cap.textContent = cfg.modelOverviewCaption;
+      }
+
+      /* ===== Viser 4D Viewer ===== */
+      const viserIframe = document.getElementById('viser-iframe');
+      if (viserIframe && cfg.viser4D && cfg.viser4D.playbackPath) {
+        const clientBase = "static/viser-client/index.html";
+        viserIframe.src = `${clientBase}?playbackPath=${cfg.viser4D.playbackPath}`;
+      }
+
+      /* ===== 일반 video: 클릭하면 play/pause (비교용 두 영상 제외) ===== */
+      const vLeft = document.getElementById('video-left');
+      const vRight = document.getElementById('video-right');
+
+      const allVideos = Array.from(document.querySelectorAll('video'));
+      allVideos.forEach(v => {
+        if (v === vLeft || v === vRight) return;
+        v.addEventListener('click', () => {
+          if (v.paused) v.play(); else v.pause();
+        });
       });
-    });
 
-    /* ===== Interactive 3D viewer tabs ===== */
-    const mv = document.getElementById('mv-4d');
-    const viewerThumbs = document.getElementById('viewer-3d-thumbs');
-    if (mv && viewerThumbs && Array.isArray(cfg.interactive3D) && cfg.interactive3D.length) {
-      const items = cfg.interactive3D;
+      /* ===== Interactive 3D viewer tabs ===== */
+      const mv = document.getElementById('mv-4d');
+      const viewerThumbs = document.getElementById('viewer-3d-thumbs');
+      if (mv && viewerThumbs && Array.isArray(cfg.interactive3D) && cfg.interactive3D.length) {
+        const items = cfg.interactive3D;
 
-      const setModel = (src) => {
-        if (!src) return;
-        mv.src = src;
-      };
+        const setModel = (src) => {
+          if (!src) return;
+          mv.src = src;
+        };
 
-      setModel(items[0].model);
+        setModel(items[0].model);
 
-      viewerThumbs.innerHTML = items.map((r, idx) => `
+        viewerThumbs.innerHTML = items.map((r, idx) => `
         <button class="result-thumb ${idx === 0 ? 'is-active' : ''}"
                 data-model="${r.model}">
           <div class="result-thumb-inner">
@@ -968,24 +966,24 @@
         </button>
       `).join('');
 
-      const buttons = Array.from(viewerThumbs.querySelectorAll('.result-thumb'));
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const src = btn.dataset.model;
-          if (src) setModel(src);
-          buttons.forEach(b => b.classList.remove('is-active'));
-          btn.classList.add('is-active');
+        const buttons = Array.from(viewerThumbs.querySelectorAll('.result-thumb'));
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const src = btn.dataset.model;
+            if (src) setModel(src);
+            buttons.forEach(b => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+          });
         });
-      });
-    }
+      }
 
-    /* ===== Results: images + tabs ===== */
-    const mainResultImage = document.getElementById('result-main');
-    const thumbsContainer = document.getElementById('results-thumbs-container');
+      /* ===== Results: images + tabs ===== */
+      const mainResultImage = document.getElementById('result-main');
+      const thumbsContainer = document.getElementById('results-thumbs-container');
 
-    if (mainResultImage && thumbsContainer && Array.isArray(cfg.results) && cfg.results.length) {
-      mainResultImage.src = cfg.results[0].image;
-      thumbsContainer.innerHTML = cfg.results.map((r, idx) => `
+      if (mainResultImage && thumbsContainer && Array.isArray(cfg.results) && cfg.results.length) {
+        mainResultImage.src = cfg.results[0].image;
+        thumbsContainer.innerHTML = cfg.results.map((r, idx) => `
         <button class="result-thumb ${idx === 0 ? 'is-active' : ''}" data-image="${r.image}">
           <div class="result-thumb-inner">
             <span class="tag is-medium is-rounded is-light">${r.label}</span>
@@ -993,128 +991,128 @@
         </button>
       `).join('');
 
-      const resultThumbs = Array.from(thumbsContainer.querySelectorAll('.result-thumb'));
-      resultThumbs.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const imgPath = btn.dataset.image;
-          if (imgPath) mainResultImage.src = imgPath;
-          resultThumbs.forEach(b => b.classList.remove('is-active'));
-          btn.classList.add('is-active');
+        const resultThumbs = Array.from(thumbsContainer.querySelectorAll('.result-thumb'));
+        resultThumbs.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const imgPath = btn.dataset.image;
+            if (imgPath) mainResultImage.src = imgPath;
+            resultThumbs.forEach(b => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+          });
         });
-      });
-    }
-
-    /* ===== Qualitative video compare ===== */
-    const container = document.getElementById('video-compare-container');
-    const videoRight = vRight;
-    const handle = document.getElementById('compare-handle');
-    const leftLabel = document.getElementById('video-left-label');
-    const rightLabel = document.getElementById('video-right-label');
-    const vcThumbs = document.getElementById('video-compare-thumbs');
-    const compareProgress = document.getElementById('video-compare-progress');
-    const comparePlayBtn = document.getElementById('video-compare-play');
-    const compareTimeLabel = document.getElementById('video-compare-time');
-
-    const applyCompareVariant = (variant, autoplay=true) => {
-      if (!variant || !vLeft || !vRight) return;
-      const sL = vLeft.querySelector('source');
-      const sR = vRight.querySelector('source');
-      if (sL && variant.leftSrc)  sL.src  = variant.leftSrc;
-      if (sR && variant.rightSrc) sR.src = variant.rightSrc;
-      vLeft.load();
-      vRight.load();
-      if (autoplay) {
-        vLeft.play().catch(() => {});
-        vRight.play().catch(() => {});
       }
-      if (leftLabel && variant.leftLabel)   leftLabel.textContent = variant.leftLabel;
-      if (rightLabel && variant.rightLabel) rightLabel.textContent = variant.rightLabel;
-      if (compareProgress) {
-        compareProgress.value = 0;
-        compareProgress.style.setProperty('--val', '0%');
-      }
-      if (compareTimeLabel) {
-        compareTimeLabel.textContent = '0:00 / 0:00';
-      }
-    };
 
-    if (Array.isArray(cfg.videoCompareSets) &&
+      /* ===== Qualitative video compare ===== */
+      const container = document.getElementById('video-compare-container');
+      const videoRight = vRight;
+      const handle = document.getElementById('compare-handle');
+      const leftLabel = document.getElementById('video-left-label');
+      const rightLabel = document.getElementById('video-right-label');
+      const vcThumbs = document.getElementById('video-compare-thumbs');
+      const compareProgress = document.getElementById('video-compare-progress');
+      const comparePlayBtn = document.getElementById('video-compare-play');
+      const compareTimeLabel = document.getElementById('video-compare-time');
+
+      const applyCompareVariant = (variant, autoplay = true) => {
+        if (!variant || !vLeft || !vRight) return;
+        const sL = vLeft.querySelector('source');
+        const sR = vRight.querySelector('source');
+        if (sL && variant.leftSrc) sL.src = variant.leftSrc;
+        if (sR && variant.rightSrc) sR.src = variant.rightSrc;
+        vLeft.load();
+        vRight.load();
+        if (autoplay) {
+          vLeft.play().catch(() => { });
+          vRight.play().catch(() => { });
+        }
+        if (leftLabel && variant.leftLabel) leftLabel.textContent = variant.leftLabel;
+        if (rightLabel && variant.rightLabel) rightLabel.textContent = variant.rightLabel;
+        if (compareProgress) {
+          compareProgress.value = 0;
+          compareProgress.style.setProperty('--val', '0%');
+        }
+        if (compareTimeLabel) {
+          compareTimeLabel.textContent = '0:00 / 0:00';
+        }
+      };
+
+      if (Array.isArray(cfg.videoCompareSets) &&
         cfg.videoCompareSets.length &&
         container && videoRight && handle) {
 
-      const sets = cfg.videoCompareSets;
+        const sets = cfg.videoCompareSets;
 
-      // 초기 세트 적용
-      applyCompareVariant(sets[0], true);
+        // 초기 세트 적용
+        applyCompareVariant(sets[0], true);
 
-      // 프로그레스 바 + 시간 동기화
-      if (compareProgress && vLeft && vRight) {
-        let isSeekingCompare = false;
+        // 프로그레스 바 + 시간 동기화
+        if (compareProgress && vLeft && vRight) {
+          let isSeekingCompare = false;
 
-        const updateCompareProgress = () => {
-          if (!vLeft.duration || isSeekingCompare) return;
-          const ratio = vLeft.currentTime / vLeft.duration;
-          const pct = Math.max(0, Math.min(100, ratio * 100));
-          compareProgress.value = isNaN(pct) ? 0 : pct;
-          compareProgress.style.setProperty('--val', `${pct}%`);
+          const updateCompareProgress = () => {
+            if (!vLeft.duration || isSeekingCompare) return;
+            const ratio = vLeft.currentTime / vLeft.duration;
+            const pct = Math.max(0, Math.min(100, ratio * 100));
+            compareProgress.value = isNaN(pct) ? 0 : pct;
+            compareProgress.style.setProperty('--val', `${pct}%`);
 
-          if (compareTimeLabel) {
-            compareTimeLabel.textContent =
-              `${formatTime(vLeft.currentTime)} / ${formatTime(vLeft.duration)}`;
-          }
-        };
+            if (compareTimeLabel) {
+              compareTimeLabel.textContent =
+                `${formatTime(vLeft.currentTime)} / ${formatTime(vLeft.duration)}`;
+            }
+          };
 
-        vLeft.addEventListener('timeupdate', updateCompareProgress);
-        vLeft.addEventListener('loadedmetadata', updateCompareProgress);
+          vLeft.addEventListener('timeupdate', updateCompareProgress);
+          vLeft.addEventListener('loadedmetadata', updateCompareProgress);
 
-        compareProgress.addEventListener('input', () => {
-          if (!vLeft.duration) return;
-          isSeekingCompare = true;
-          const pct = parseFloat(compareProgress.value) / 100;
-          const t = vLeft.duration * pct;
-          vLeft.currentTime = t;
-          if (vRight.duration) {
-            vRight.currentTime = Math.min(t, vRight.duration);
-          } else {
-            vRight.currentTime = t;
-          }
-          compareProgress.style.setProperty('--val', `${pct * 100}%`);
-        });
+          compareProgress.addEventListener('input', () => {
+            if (!vLeft.duration) return;
+            isSeekingCompare = true;
+            const pct = parseFloat(compareProgress.value) / 100;
+            const t = vLeft.duration * pct;
+            vLeft.currentTime = t;
+            if (vRight.duration) {
+              vRight.currentTime = Math.min(t, vRight.duration);
+            } else {
+              vRight.currentTime = t;
+            }
+            compareProgress.style.setProperty('--val', `${pct * 100}%`);
+          });
 
-        const stopSeekingCompare = () => { isSeekingCompare = false; };
-        compareProgress.addEventListener('change', stopSeekingCompare);
-        compareProgress.addEventListener('mouseup', stopSeekingCompare);
-        compareProgress.addEventListener('touchend', stopSeekingCompare);
-      }
+          const stopSeekingCompare = () => { isSeekingCompare = false; };
+          compareProgress.addEventListener('change', stopSeekingCompare);
+          compareProgress.addEventListener('mouseup', stopSeekingCompare);
+          compareProgress.addEventListener('touchend', stopSeekingCompare);
+        }
 
-      // Play/Pause 버튼
-      if (comparePlayBtn && vLeft && vRight) {
-        const syncCompareButton = () => {
-          const playing = !vLeft.paused && !vRight.paused;
-          comparePlayBtn.dataset.state = playing ? 'pause' : 'play';
-        };
+        // Play/Pause 버튼
+        if (comparePlayBtn && vLeft && vRight) {
+          const syncCompareButton = () => {
+            const playing = !vLeft.paused && !vRight.paused;
+            comparePlayBtn.dataset.state = playing ? 'pause' : 'play';
+          };
 
-        comparePlayBtn.addEventListener('click', () => {
-          const playing = !vLeft.paused && !vRight.paused;
-          if (playing) {
-            vLeft.pause();
-            vRight.pause();
-          } else {
-            vLeft.play().catch(()=>{});
-            vRight.play().catch(()=>{});
-          }
-        });
+          comparePlayBtn.addEventListener('click', () => {
+            const playing = !vLeft.paused && !vRight.paused;
+            if (playing) {
+              vLeft.pause();
+              vRight.pause();
+            } else {
+              vLeft.play().catch(() => { });
+              vRight.play().catch(() => { });
+            }
+          });
 
-        vLeft.addEventListener('play', syncCompareButton);
-        vLeft.addEventListener('pause', syncCompareButton);
-        vRight.addEventListener('play', syncCompareButton);
-        vRight.addEventListener('pause', syncCompareButton);
-        syncCompareButton();
-      }
+          vLeft.addEventListener('play', syncCompareButton);
+          vLeft.addEventListener('pause', syncCompareButton);
+          vRight.addEventListener('play', syncCompareButton);
+          vRight.addEventListener('pause', syncCompareButton);
+          syncCompareButton();
+        }
 
-      // 세트 탭
-      if (vcThumbs) {
-        vcThumbs.innerHTML = sets.map((s, idx) => `
+        // 세트 탭
+        if (vcThumbs) {
+          vcThumbs.innerHTML = sets.map((s, idx) => `
           <button class="result-thumb ${idx === 0 ? 'is-active' : ''}"
                   data-index="${idx}">
             <div class="result-thumb-inner">
@@ -1123,176 +1121,176 @@
           </button>
         `).join('');
 
-        const buttons = Array.from(vcThumbs.querySelectorAll('.result-thumb'));
-        buttons.forEach(btn => {
-          btn.addEventListener('click', () => {
-            const idx = parseInt(btn.dataset.index, 10);
-            if (!isNaN(idx) && sets[idx]) {
-              applyCompareVariant(sets[idx], true);
-            }
-            buttons.forEach(b => b.classList.remove('is-active'));
-            btn.classList.add('is-active');
+          const buttons = Array.from(vcThumbs.querySelectorAll('.result-thumb'));
+          buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+              const idx = parseInt(btn.dataset.index, 10);
+              if (!isNaN(idx) && sets[idx]) {
+                applyCompareVariant(sets[idx], true);
+              }
+              buttons.forEach(b => b.classList.remove('is-active'));
+              btn.classList.add('is-active');
+            });
           });
-        });
+        }
+
+        // 슬라이더 드래그
+        let isDraggingCompare = false;
+
+        const updatePosFromClientX = (clientX) => {
+          const rect = container.getBoundingClientRect();
+          let t = (clientX - rect.left) / rect.width;
+          t = Math.max(0, Math.min(1, t));
+
+          const percent = t * 100;
+
+          if (videoRight) {
+            videoRight.style.clipPath = `inset(0 0 0 ${percent}%)`;
+          }
+          if (handle) {
+            handle.style.left = `${percent}%`;
+          }
+
+          const leftWidth = percent;
+          const rightWidth = 100 - percent;
+          const MIN_VISIBLE = 10;
+
+          if (leftLabel) {
+            leftLabel.style.opacity = leftWidth < MIN_VISIBLE ? '0' : '1';
+            leftLabel.style.pointerEvents = leftWidth < MIN_VISIBLE ? 'none' : '';
+          }
+
+          if (rightLabel) {
+            rightLabel.style.opacity = rightWidth < MIN_VISIBLE ? '0' : '1';
+            rightLabel.style.pointerEvents = rightWidth < MIN_VISIBLE ? 'none' : '';
+          }
+        };
+
+        const onPointerMove = (e) => {
+          if (!isDraggingCompare) return;
+          updatePosFromClientX(e.clientX);
+        };
+        const stopDrag = () => { isDraggingCompare = false; };
+        const startDrag = (e) => {
+          isDraggingCompare = true;
+          updatePosFromClientX(e.clientX);
+          e.preventDefault();
+        };
+
+        handle.addEventListener('mousedown', startDrag);
+        container.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', stopDrag);
+
+        handle.addEventListener('touchstart', (e) => {
+          isDraggingCompare = true;
+          updatePosFromClientX(e.touches[0].clientX);
+        }, { passive: true });
+        container.addEventListener('touchstart', (e) => {
+          isDraggingCompare = true;
+          updatePosFromClientX(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (!isDraggingCompare) return;
+          updatePosFromClientX(e.touches[0].clientX);
+        }, { passive: true });
+        window.addEventListener('touchend', () => { isDraggingCompare = false; });
+        window.addEventListener('touchcancel', () => { isDraggingCompare = false; });
+
+        const initialRect = container.getBoundingClientRect();
+        updatePosFromClientX(initialRect.left + initialRect.width * 0.5);
       }
 
-      // 슬라이더 드래그
-      let isDraggingCompare = false;
+      /* ===== More Results: 비디오 + 컨트롤 ===== */
+      const moreMainVideo = document.getElementById('more-results-main');
+      const moreMainSource = document.getElementById('more-results-main-source');
+      const moreThumbsContainer = document.getElementById('more-results-thumbs-container');
+      const moreProgress = document.getElementById('more-results-progress');
+      const morePlayBtn = document.getElementById('more-results-play');
+      const moreTimeLabel = document.getElementById('more-results-time');
 
-      const updatePosFromClientX = (clientX) => {
-        const rect = container.getBoundingClientRect();
-        let t = (clientX - rect.left) / rect.width;
-        t = Math.max(0, Math.min(1, t));
-
-        const percent = t * 100;
-
-        if (videoRight) {
-          videoRight.style.clipPath = `inset(0 0 0 ${percent}%)`;
-        }
-        if (handle) {
-          handle.style.left = `${percent}%`;
-        }
-
-        const leftWidth  = percent;
-        const rightWidth = 100 - percent;
-        const MIN_VISIBLE = 10;
-
-        if (leftLabel) {
-          leftLabel.style.opacity = leftWidth < MIN_VISIBLE ? '0' : '1';
-          leftLabel.style.pointerEvents = leftWidth < MIN_VISIBLE ? 'none' : '';
-        }
-
-        if (rightLabel) {
-          rightLabel.style.opacity = rightWidth < MIN_VISIBLE ? '0' : '1';
-          rightLabel.style.pointerEvents = rightWidth < MIN_VISIBLE ? 'none' : '';
-        }
-      };
-
-      const onPointerMove = (e) => {
-        if (!isDraggingCompare) return;
-        updatePosFromClientX(e.clientX);
-      };
-      const stopDrag = () => { isDraggingCompare = false; };
-      const startDrag = (e) => {
-        isDraggingCompare = true;
-        updatePosFromClientX(e.clientX);
-        e.preventDefault();
-      };
-
-      handle.addEventListener('mousedown', startDrag);
-      container.addEventListener('mousedown', startDrag);
-      window.addEventListener('mousemove', onPointerMove);
-      window.addEventListener('mouseup', stopDrag);
-
-      handle.addEventListener('touchstart', (e) => {
-        isDraggingCompare = true;
-        updatePosFromClientX(e.touches[0].clientX);
-      }, { passive: true });
-      container.addEventListener('touchstart', (e) => {
-        isDraggingCompare = true;
-        updatePosFromClientX(e.touches[0].clientX);
-      }, { passive: true });
-      window.addEventListener('touchmove', (e) => {
-        if (!isDraggingCompare) return;
-        updatePosFromClientX(e.touches[0].clientX);
-      }, { passive: true });
-      window.addEventListener('touchend', () => { isDraggingCompare = false; });
-      window.addEventListener('touchcancel', () => { isDraggingCompare = false; });
-
-      const initialRect = container.getBoundingClientRect();
-      updatePosFromClientX(initialRect.left + initialRect.width * 0.5);
-    }
-
-    /* ===== More Results: 비디오 + 컨트롤 ===== */
-    const moreMainVideo       = document.getElementById('more-results-main');
-    const moreMainSource      = document.getElementById('more-results-main-source');
-    const moreThumbsContainer = document.getElementById('more-results-thumbs-container');
-    const moreProgress        = document.getElementById('more-results-progress');
-    const morePlayBtn         = document.getElementById('more-results-play');
-    const moreTimeLabel       = document.getElementById('more-results-time');
-
-    if (moreMainVideo &&
+      if (moreMainVideo &&
         moreMainSource &&
         moreThumbsContainer &&
         Array.isArray(cfg.moreResultsVideos) &&
         cfg.moreResultsVideos.length) {
 
-      const vids = cfg.moreResultsVideos;
+        const vids = cfg.moreResultsVideos;
 
-      const setMainVideo = (src, autoplay = true) => {
-        moreMainSource.src = src;
-        moreMainVideo.load();
-        if (moreProgress) {
-          moreProgress.value = 0;
-          moreProgress.style.setProperty('--val', '0%');
-        }
-        if (moreTimeLabel) {
-          moreTimeLabel.textContent = '0:00 / 0:00';
-        }
-        if (autoplay) {
-          moreMainVideo.play().catch(() => {});
-        }
-      };
-
-      // 초기 상태
-      setMainVideo(vids[0].src, false);
-
-      // 프로그레스 + 시간 동기화
-      if (moreProgress) {
-        let isSeekingMore = false;
-
-        const updateMoreProgress = () => {
-          if (!moreMainVideo.duration || isSeekingMore) return;
-          const ratio = moreMainVideo.currentTime / moreMainVideo.duration;
-          const pct = Math.max(0, Math.min(100, ratio * 100));
-          moreProgress.value = isNaN(pct) ? 0 : pct;
-          moreProgress.style.setProperty('--val', `${pct}%`);
-
+        const setMainVideo = (src, autoplay = true) => {
+          moreMainSource.src = src;
+          moreMainVideo.load();
+          if (moreProgress) {
+            moreProgress.value = 0;
+            moreProgress.style.setProperty('--val', '0%');
+          }
           if (moreTimeLabel) {
-            moreTimeLabel.textContent =
-              `${formatTime(moreMainVideo.currentTime)} / ${formatTime(moreMainVideo.duration)}`;
+            moreTimeLabel.textContent = '0:00 / 0:00';
+          }
+          if (autoplay) {
+            moreMainVideo.play().catch(() => { });
           }
         };
 
-        moreMainVideo.addEventListener('timeupdate', updateMoreProgress);
-        moreMainVideo.addEventListener('loadedmetadata', updateMoreProgress);
+        // 초기 상태
+        setMainVideo(vids[0].src, false);
 
-        moreProgress.addEventListener('input', () => {
-          if (!moreMainVideo.duration) return;
-          isSeekingMore = true;
-          const pct = parseFloat(moreProgress.value) / 100;
-          const t = moreMainVideo.duration * pct;
-          moreMainVideo.currentTime = t;
-          moreProgress.style.setProperty('--val', `${pct * 100}%`);
-        });
+        // 프로그레스 + 시간 동기화
+        if (moreProgress) {
+          let isSeekingMore = false;
 
-        const stopSeekingMore = () => { isSeekingMore = false; };
-        moreProgress.addEventListener('change', stopSeekingMore);
-        moreProgress.addEventListener('mouseup', stopSeekingMore);
-        moreProgress.addEventListener('touchend', stopSeekingMore);
-      }
+          const updateMoreProgress = () => {
+            if (!moreMainVideo.duration || isSeekingMore) return;
+            const ratio = moreMainVideo.currentTime / moreMainVideo.duration;
+            const pct = Math.max(0, Math.min(100, ratio * 100));
+            moreProgress.value = isNaN(pct) ? 0 : pct;
+            moreProgress.style.setProperty('--val', `${pct}%`);
 
-      // Play/Pause 버튼
-      if (morePlayBtn) {
-        const syncMoreButton = () => {
-          morePlayBtn.dataset.state = moreMainVideo.paused ? 'play' : 'pause';
-        };
+            if (moreTimeLabel) {
+              moreTimeLabel.textContent =
+                `${formatTime(moreMainVideo.currentTime)} / ${formatTime(moreMainVideo.duration)}`;
+            }
+          };
 
-        morePlayBtn.addEventListener('click', () => {
-          if (moreMainVideo.paused) {
-            moreMainVideo.play().catch(()=>{});
-          } else {
-            moreMainVideo.pause();
-          }
-        });
+          moreMainVideo.addEventListener('timeupdate', updateMoreProgress);
+          moreMainVideo.addEventListener('loadedmetadata', updateMoreProgress);
 
-        moreMainVideo.addEventListener('play', syncMoreButton);
-        moreMainVideo.addEventListener('pause', syncMoreButton);
-        syncMoreButton();
-      }
+          moreProgress.addEventListener('input', () => {
+            if (!moreMainVideo.duration) return;
+            isSeekingMore = true;
+            const pct = parseFloat(moreProgress.value) / 100;
+            const t = moreMainVideo.duration * pct;
+            moreMainVideo.currentTime = t;
+            moreProgress.style.setProperty('--val', `${pct * 100}%`);
+          });
 
-      // 썸네일 탭
-      moreThumbsContainer.innerHTML = vids.map((r, idx) => `
+          const stopSeekingMore = () => { isSeekingMore = false; };
+          moreProgress.addEventListener('change', stopSeekingMore);
+          moreProgress.addEventListener('mouseup', stopSeekingMore);
+          moreProgress.addEventListener('touchend', stopSeekingMore);
+        }
+
+        // Play/Pause 버튼
+        if (morePlayBtn) {
+          const syncMoreButton = () => {
+            morePlayBtn.dataset.state = moreMainVideo.paused ? 'play' : 'pause';
+          };
+
+          morePlayBtn.addEventListener('click', () => {
+            if (moreMainVideo.paused) {
+              moreMainVideo.play().catch(() => { });
+            } else {
+              moreMainVideo.pause();
+            }
+          });
+
+          moreMainVideo.addEventListener('play', syncMoreButton);
+          moreMainVideo.addEventListener('pause', syncMoreButton);
+          syncMoreButton();
+        }
+
+        // 썸네일 탭
+        moreThumbsContainer.innerHTML = vids.map((r, idx) => `
         <button class="result-thumb ${idx === 0 ? 'is-active' : ''}"
                 data-src="${r.src}">
           <div class="result-thumb-inner">
@@ -1301,26 +1299,27 @@
         </button>
       `).join('');
 
-      const thumbButtons =
-        Array.from(moreThumbsContainer.querySelectorAll('.result-thumb'));
+        const thumbButtons =
+          Array.from(moreThumbsContainer.querySelectorAll('.result-thumb'));
 
-      thumbButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const src = btn.dataset.src;
-          if (src) setMainVideo(src, true);
-          thumbButtons.forEach(b => b.classList.remove('is-active'));
-          btn.classList.add('is-active');
+        thumbButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const src = btn.dataset.src;
+            if (src) setMainVideo(src, true);
+            thumbButtons.forEach(b => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+          });
         });
-      });
 
-      // 비디오 클릭으로도 play/pause
-      moreMainVideo.addEventListener('click', () => {
-        if (moreMainVideo.paused) moreMainVideo.play();
-        else moreMainVideo.pause();
-      });
-    }
-  });
-</script>
+        // 비디오 클릭으로도 play/pause
+        moreMainVideo.addEventListener('click', () => {
+          if (moreMainVideo.paused) moreMainVideo.play();
+          else moreMainVideo.pause();
+        });
+      }
+    });
+  </script>
 
 </body>
+
 </html>
