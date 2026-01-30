@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,14 +59,19 @@
   <script>
     window.PAGE_CONFIG = {
       paperTitle: "ScrewGS",
-      paperSubtitleHTML: "Sogang University<br>ECCV 2026",
-      institutionLogo: "static/images/sogang_symbol.png",
-      institutionLogoAlt: "Sogang University logo",
+      paperSubtitle: { text: "ECCV 2026", logo: "" },
 
       authors: [
-        { name: "Suwoong Yeom", link: "https://github.com/YeomSuWoong", equal: true },
-        { name: "Joonsik Nam", link: "https://github.com/wwwjjn", equal: true },
-        { name: "Seunggyu Choi", link: "https://github.com/ItWasAllYellow", equal: true }
+        { name: "Suwoong Yeom", link: "https://github.com/YeomSuWoong", equal: true, affiliations: [0] },
+        { name: "Joonsik Nam", link: "https://github.com/wwwjjn", equal: true, affiliations: [0] },
+        { name: "Seunggyu Choi", link: "https://github.com/ItWasAllYellow", equal: true, affiliations: [0] },
+        { name: "Kyeongbo Kong", link: "https://scholar.google.com/citations?user=O9QSF7UAAAAJ&hl=ko&oi=sra", equal: false, affiliations: [1] },
+        { name: "Sukju Kang", link: "https://scholar.google.com/citations?user=3WYxpuYAAAAJ&hl=ko&oi=ao", equal: false, affiliations: [0] }
+      ],
+
+      affiliations: [
+        { name: "Sogang University", idx: 1, logo: "static/images/sogang_symbol.png" },
+        { name: "Pusan University", idx: 2, logo: "static/images/pusan_symbol.png" }
       ],
 
       links: {
@@ -539,14 +545,11 @@
               <div class="is-size-5 publication-authors" id="authors-container"></div>
 
               <div class="is-size-5 publication-authors">
-                <span class="author-block">
-                  <span id="institution-logo-wrapper">
-                    <img id="institution-logo" class="institution-logo" src="" alt="" style="display:none;">
-                  </span>
-                  <span id="paper-subtitle-text">
-                    Sogang University<br>Conference name and year
-                  </span>
-                </span>
+                <span class="author-block" id="paper-subtitle-text"></span>
+              </div>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block" id="affiliations-container"></span>
                 <span class="eql-cntrb" id="equal-contrib-note">
                   <small><br><sup>*</sup>Indicates Equal Contribution</small>
                 </span>
@@ -863,8 +866,13 @@
       }
 
       const subtitleTextNode = document.getElementById('paper-subtitle-text');
-      if (subtitleTextNode && cfg.paperSubtitleHTML) {
-        subtitleTextNode.innerHTML = cfg.paperSubtitleHTML;
+      if (subtitleTextNode && cfg.paperSubtitle) {
+        let logoHtml = '';
+        if (cfg.paperSubtitle.logo) {
+          logoHtml = `<img src="${cfg.paperSubtitle.logo}" alt="${cfg.paperSubtitle.text}" style="height:1.6rem; vertical-align:middle; margin-right:0.4rem;">`;
+        }
+        const text = cfg.paperSubtitle.text || cfg.paperSubtitleHTML || '';
+        subtitleTextNode.innerHTML = logoHtml + text;
       }
 
       const instLogo = document.getElementById('institution-logo');
@@ -878,7 +886,23 @@
         const authorsContainer = document.getElementById('authors-container');
         if (authorsContainer) {
           authorsContainer.innerHTML = cfg.authors.map((a, idx) => {
-            const sup = a.equal ? '<sup>*</sup>' : '';
+            // Affiliation tags (e.g. 1, 2)
+            let affTags = '';
+            if (a.affiliations && a.affiliations.length > 0) {
+              // Convert 0-based index to 1-based for display, or look up index from cfg.affiliations
+              const nums = a.affiliations.map(i => {
+                const affObj = cfg.affiliations[i];
+                return affObj ? affObj.idx : (i + 1);
+              }).join(',');
+              affTags += nums;
+            }
+
+            // Equal contribution asterisk
+            if (a.equal) {
+              affTags += '*';
+            }
+
+            const sup = affTags ? `<sup>${affTags}</sup>` : '';
             const comma = (idx < cfg.authors.length - 1) ? ',' : '';
             const link = a.link
               ? `<a href="${a.link}" target="_blank">${a.name}</a>`
@@ -886,6 +910,20 @@
             return `<span class="author-block">${link}${sup}</span>${comma}`;
           }).join(' ');
         }
+
+        // Render affiliations
+        const affContainer = document.getElementById('affiliations-container');
+        if (affContainer && Array.isArray(cfg.affiliations)) {
+          const affListHtml = cfg.affiliations.map(aff => {
+            let logoHtml = '';
+            if (aff.logo) {
+              logoHtml = `<img src="${aff.logo}" alt="${aff.name}" class="institution-logo" style="height:1.4rem; vertical-align:middle; margin-right:0.3rem;">`;
+            }
+            return `${logoHtml}<sup>${aff.idx}</sup>${aff.name}`;
+          }).join('&nbsp;&nbsp;&nbsp;');
+          affContainer.innerHTML = affListHtml;
+        }
+
         const eqNote = document.getElementById('equal-contrib-note');
         if (eqNote) {
           const hasEqual = cfg.authors.some(a => a.equal);
